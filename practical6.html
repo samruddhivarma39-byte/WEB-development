@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Grade Calculator</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+
+  <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-6">
+
+    <!-- Heading -->
+    <div class="text-center mb-6">
+      <h1 class="text-3xl font-bold text-indigo-600">
+        Student Grade Calculator
+      </h1>
+      <p class="text-gray-500 mt-2">
+        Enter marks to calculate the result
+      </p>
+    </div>
+
+    <!-- Student Name -->
+    <div class="mb-4">
+      <label class="block text-gray-700 font-medium mb-2">
+        Student Name
+      </label>
+      <input
+        type="text"
+        id="studentName"
+        placeholder="Enter student name"
+        class="w-full px-4 py-3 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500"
+      />
+    </div>
+
+    <!-- Subjects -->
+    <div class="space-y-4">
+
+      <div>
+        <label class="block text-gray-700 font-medium mb-2">
+          Mathematics
+        </label>
+        <input
+          type="number"
+          id="maths"
+          min="0"
+          max="100"
+          placeholder="Enter marks"
+          class="marks w-full px-4 py-3 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500"
+        />
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-medium mb-2">
+          Physics
+        </label>
+        <input
+          type="number"
+          id="physics"
+          min="0"
+          max="100"
+          placeholder="Enter marks"
+          class="marks w-full px-4 py-3 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500"
+        />
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-medium mb-2">
+          Chemistry
+        </label>
+        <input
+          type="number"
+          id="chemistry"
+          min="0"
+          max="100"
+          placeholder="Enter marks"
+          class="marks w-full px-4 py-3 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500"
+        />
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-medium mb-2">
+          Computer Science
+        </label>
+        <input
+          type="number"
+          id="computer"
+          min="0"
+          max="100"
+          placeholder="Enter marks"
+          class="marks w-full px-4 py-3 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500"
+        />
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-medium mb-2">
+          English
+        </label>
+        <input
+          type="number"
+          id="english"
+          min="0"
+          max="100"
+          placeholder="Enter marks"
+          class="marks w-full px-4 py-3 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500"
+        />
+      </div>
+
+    </div>
+
+    <!-- Calculate Button -->
+    <button
+      onclick="calculateResult()"
+      class="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg transition duration-200"
+    >
+      Calculate Result
+    </button>
+
+    <!-- Result -->
+    <div
+      id="result"
+      class="hidden mt-6 bg-gray-50 border rounded-xl p-5"
+    >
+
+      <h2 class="text-xl font-bold text-gray-800 text-center mb-4">
+        Result
+      </h2>
+
+      <div class="space-y-3 text-gray-700">
+
+        <div class="flex justify-between">
+          <span>Student Name</span>
+          <span id="displayName" class="font-semibold"></span>
+        </div>
+
+        <div class="flex justify-between">
+          <span>Total Marks</span>
+          <span id="total" class="font-semibold"></span>
+        </div>
+
+        <div class="flex justify-between">
+          <span>Percentage</span>
+          <span id="percentage" class="font-semibold"></span>
+        </div>
+
+        <div class="flex justify-between">
+          <span>Grade</span>
+          <span
+            id="grade"
+            class="font-bold text-xl text-indigo-600"
+          ></span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+
+    function calculateResult() {
+
+      const name = document.getElementById("studentName").value.trim();
+
+      const maths = Number(document.getElementById("maths").value);
+      const physics = Number(document.getElementById("physics").value);
+      const chemistry = Number(document.getElementById("chemistry").value);
+      const computer = Number(document.getElementById("computer").value);
+      const english = Number(document.getElementById("english").value);
+
+      // Check student name
+      if (name === "") {
+        alert("Please enter student name.");
+        return;
+      }
+
+      // Check marks
+      const marks = [maths, physics, chemistry, computer, english];
+
+      if (marks.some(mark => mark < 0 || mark > 100 || isNaN(mark))) {
+        alert("Please enter valid marks between 0 and 100.");
+        return;
+      }
+
+      // Calculate total
+      const total = maths + physics + chemistry + computer + english;
+
+      // Calculate percentage
+      const percentage = total / 5;
+
+      // Calculate grade
+      let grade;
+
+      if (percentage >= 90) {
+        grade = "A+";
+      } else if (percentage >= 80) {
+        grade = "A";
+      } else if (percentage >= 70) {
+        grade = "B";
+      } else if (percentage >= 60) {
+        grade = "C";
+      } else if (percentage >= 50) {
+        grade = "D";
+      } else if (percentage >= 40) {
+        grade = "E";
+      } else {
+        grade = "F";
+      }
+
+      // Display result
+      document.getElementById("displayName").textContent = name;
+      document.getElementById("total").textContent = `${total} / 500`;
+      document.getElementById("percentage").textContent =
+        `${percentage.toFixed(2)}%`;
+      document.getElementById("grade").textContent = grade;
+
+      document.getElementById("result").classList.remove("hidden");
+    }
+
+  </script>
+
+</body>
+</html>
