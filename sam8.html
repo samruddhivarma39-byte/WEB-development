@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Registration Form</title>
+    <link rel="stylesheet" href="style.css">
+    <title>CM25110</title>
+</head>
+<body>
+
+    <div class="container">
+        <h1> CM25110 </h1>
+        <h2>Student Registration Form</h2>
+
+        <form id="registrationForm">
+
+            <label>Full Name</label>
+            <input type="text" id="name" placeholder="Enter your name">
+            <span id="nameError"></span>
+
+            <label>Email</label>
+            <input type="text" id="email" placeholder="Enter your email">
+            <span id="emailError"></span>
+
+            <label>Password</label>
+            <input type="password" id="password" placeholder="Enter password">
+            <span id="passwordError"></span>
+
+            <label>Mobile Number</label>
+            <input type="text" id="mobile" placeholder="Enter 10-digit mobile number">
+            <span id="mobileError"></span>
+
+            <label>Course</label>
+            <select id="course">
+                <option value="">Select Course</option>
+                <option value="AIML">AIML</option>
+                <option value="CSE">CSE</option>
+                <option value="ECE">ECE</option>
+                <option value="IT">IT</option>
+            </select>
+            <span id="courseError"></span>
+
+            <button type="submit">Register</button>
+
+        </form>
+
+        <p id="successMessage"></p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
