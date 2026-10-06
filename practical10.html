@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Life Planner</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+        }
+
+        .dark .glass {
+            background: rgba(31, 41, 55, 0.85);
+        }
+
+        .task-completed {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+
+        .progress-animation {
+            transition: width 0.6s ease;
+        }
+    </style>
+</head>
+
+
+<body id="body"
+    class="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 text-gray-800 transition-all duration-500">
+
+
+    <!-- ================= NAVBAR ================= -->
+
+    <nav class="glass sticky top-0 z-50 shadow-md">
+
+        <div class="max-w-7xl mx-auto px-5 py-4 flex justify-between items-center">
+
+            <!-- Logo -->
+
+            <div class="flex items-center gap-3">
+
+                <div
+                    class="w-11 h-11 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xl shadow-lg">
+                    🎓
+                </div>
+
+                <div>
+
+                    <h1 class="text-xl md:text-2xl font-bold">
+                        Student Life Planner
+                    </h1>
+
+                    <p class="text-xs text-gray-500">
+                        Plan • Study • Achieve
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Dark Mode -->
+
+            <button onclick="toggleDarkMode()"
+                class="w-11 h-11 rounded-xl bg-gray-100 hover:bg-gray-200 transition text-xl">
+
+                <span id="themeIcon">🌙</span>
+
+            </button>
+
+        </div>
+
+    </nav>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="max-w-7xl mx-auto px-5 py-8">
+
+
+        <!-- ================= HERO ================= -->
+
+        <section class="mb-8">
+
+            <div
+                class="rounded-3xl p-7 md:p-10 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 text-white shadow-2xl">
+
+                <div class="max-w-3xl">
+
+                    <p class="text-indigo-100 mb-2">
+                        👋 Welcome back!
+                    </p>
+
+                    <h2 class="text-3xl md:text-5xl font-bold mb-4">
+                        Make today productive.
+                    </h2>
+
+                    <p class="text-indigo-100 max-w-xl">
+                        Manage your assignments, study plans,
+                        exams and personal tasks from one simple dashboard.
+                    </p>
+
+                    <button onclick="scrollToTasks()"
+                        class="mt-6 bg-white text-indigo-600 px-6 py-3 rounded-xl font-bold hover:scale-105 transition shadow-lg">
+
+                        Start Planning →
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= STATISTICS ================= -->
+
+        <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+
+
+            <!-- Total -->
+
+            <div class="glass rounded-2xl p-5 shadow-lg">
+
+                <div class="flex justify-between">
+
+                    <div>
+
+                        <p class="text-sm text-gray-500">
+                            Total Tasks
+                        </p>
+
+                        <h3 id="totalTasks"
+                            class="text-3xl font-bold text-indigo-600 mt-2">
+                            0
+                        </h3>
+
+                    </div>
+
+                    <span class="text-3xl">
+                        📋
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- Completed -->
+
+            <div class="glass rounded-2xl p-5 shadow-lg">
+
+                <div class="flex justify-between">
+
+                    <div>
+
+                        <p class="text-sm text-gray-500">
+                            Completed
+                        </p>
+
+                        <h3 id="completedTasks"
+                            class="text-3xl font-bold text-green-500 mt-2">
+                            0
+                        </h3>
+
+                    </div>
+
+                    <span class="text-3xl">
+                        ✅
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- Pending -->
+
+            <div class="glass rounded-2xl p-5 shadow-lg">
+
+                <div class="flex justify-between">
+
+                    <div>
+
+                        <p class="text-sm text-gray-500">
+                            Pending
+                        </p>
+
+                        <h3 id="pendingTasks"
+                            class="text-3xl font-bold text-orange-500 mt-2">
+                            0
+                        </h3>
+
+                    </div>
+
+                    <span class="text-3xl">
+                        ⏳
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- Overdue -->
+
+            <div class="glass rounded-2xl p-5 shadow-lg">
+
+                <div class="flex justify-between">
+
+                    <div>
+
+                        <p class="text-sm text-gray-500">
+                            Overdue
+                        </p>
+
+                        <h3 id="overdueTasks"
+                            class="text-3xl font-bold text-red-500 mt-2">
+                            0
+                        </h3>
+
+                    </div>
+
+                    <span class="text-3xl">
+                        🚨
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= PROGRESS ================= -->
+
+        <section class="glass rounded-2xl shadow-lg p-6 mb-8">
+
+            <div class="flex justify-between items-center mb-3">
+
+                <div>
+
+                    <h3 class="font-bold text-lg">
+                        📊 Productivity Progress
+                    </h3>
+
+                    <p class="text-sm text-gray-500">
+                        Keep completing your tasks!
+                    </p>
+
+                </div>
+
+                <span id="progressText"
+                    class="text-2xl font-bold text-indigo-600">
+                    0%
+                </span>
+
+            </div>
+
+
+            <div class="w-full bg-gray-200 rounded-full h-4">
+
+                <div id="progressBar"
+                    class="progress-animation h-4 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600"
+                    style="width:0%">
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= ADD TASK ================= -->
+
+        <section id="tasksSection"
+            class="glass rounded-3xl shadow-xl p-6 mb-8">
+
+            <div class="flex items-center justify-between mb-6">
+
+                <div>
+
+                    <h2 class="text-2xl font-bold">
+                        ➕ Add New Task
+                    </h2>
+
+                    <p class="text-sm text-gray-500 mt-1">
+                        Add your academic or personal activity.
+                    </p>
+
+                </div>
+
+                <span class="hidden md:block text-4xl">
+                    ✨
+                </span>
+
+            </div>
+
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+
+                <!-- Task -->
+
+                <input id="taskInput"
+                    type="text"
+                    placeholder="Enter task name..."
+                    class="lg:col-span-2 px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+
+
+                <!-- Category -->
+
+                <select id="categoryInput"
+                    class="px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+
+                    <option value="📚 Study">📚 Study</option>
+
+                    <option value="📝 Assignment">
+                        📝 Assignment
+                    </option>
+
+                    <option value="📖 Exam">
+                        📖 Exam
+                    </option>
+
+                    <option value="🏠 Personal">
+                        🏠 Personal
+                    </option>
+
+                    <option value="💻 Project">
+                        💻 Project
+                    </option>
+
+                </select>
+
+
+                <!-- Priority -->
+
+                <select id="priorityInput"
+                    class="px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+
+                    <option value="Low">
+                        🟢 Low Priority
+                    </option>
+
+                    <option value="Medium">
+                        🟡 Medium Priority
+                    </option>
+
+                    <option value="High">
+                        🔴 High Priority
+                    </option>
+
+                </select>
+
+
+                <!-- Date -->
+
+                <input id="dateInput"
+                    type="date"
+                    class="px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+
+
+            </div>
+
+
+            <button onclick="addTask()"
+                class="w-full mt-5 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold hover:from-indigo-600 hover:to-purple-700 hover:scale-[1.01] transition shadow-lg">
+
+                + Add Task
+
+            </button>
+
+        </section>
+
+
+        <!-- ================= SEARCH / FILTER ================= -->
+
+        <section class="glass rounded-2xl shadow-lg p-5 mb-6">
+
+            <div class="grid md:grid-cols-3 gap-3">
+
+
+                <!-- Search -->
+
+                <input id="searchInput"
+                    oninput="displayTasks()"
+                    type="text"
+                    placeholder="🔍 Search tasks..."
+                    class="px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+
+
+                <!-- Filter -->
+
+                <select id="filterInput"
+                    onchange="displayTasks()"
+                    class="px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+
+                    <option value="all">
+                        📋 All Tasks
+                    </option>
+
+                    <option value="active">
+                        ⏳ Active
+                    </option>
+
+                    <option value="completed">
+                        ✅ Completed
+                    </option>
+
+                    <option value="high">
+                        🔴 High Priority
+                    </option>
+
+                    <option value="today">
+                        📅 Today
+                    </option>
+
+                </select>
+
+
+                <!-- Sort -->
+
+                <select id="sortInput"
+                    onchange="displayTasks()"
+                    class="px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+
+                    <option value="newest">
+                        🆕 Newest First
+                    </option>
+
+                    <option value="oldest">
+                        ⏰ Oldest First
+                    </option>
+
+                    <option value="priority">
+                        🔥 Priority
+                    </option>
+
+                    <option value="date">
+                        📅 Due Date
+                    </option>
+
+                </select>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= TASK LIST ================= -->
+
+        <section class="glass rounded-3xl shadow-xl p-6">
+
+
+            <div class="flex justify-between items-center mb-6">
+
+                <div>
+
+                    <h2 class="text-2xl font-bold">
+                        📋 My Tasks
+                    </h2>
+
+                    <p class="text-sm text-gray-500">
+                        Your daily activities
+                    </p>
+
+                </div>
+
+
+                <button onclick="clearCompleted()"
+                    class="text-sm font-semibold text-red-500 hover:text-red-700">
+
+                    🧹 Clear Completed
+
+                </button>
+
+            </div>
+
+
+            <!-- Tasks -->
+
+            <div id="taskList"
+                class="space-y-4">
+            </div>
+
+
+            <!-- Empty -->
+
+            <div id="emptyMessage"
+                class="text-center py-14">
+
+                <div class="text-6xl mb-4">
+                    🎉
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-600">
+                    No tasks found
+                </h3>
+
+                <p class="text-gray-400 mt-2">
+                    Add a task and start your productive day.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="text-center py-8 text-gray-500">
+
+        <p>
+            Made with ❤️ for students
+        </p>
+
+        <p class="text-xs mt-1">
+            HTML • Tailwind CSS • JavaScript
+        </p>
+
+    </footer>
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <script>
+
+        // Load saved tasks
+        let tasks =
+            JSON.parse(localStorage.getItem("studentTasks")) || [];
+
+
+        // ================= ADD TASK =================
+
+        function addTask() {
+
+            const taskInput =
+                document.getElementById("taskInput");
+
+            const category =
+                document.getElementById("categoryInput").value;
+
+            const priority =
+                document.getElementById("priorityInput").value;
+
+            const date =
+                document.getElementById("dateInput").value;
+
+            const text =
+                taskInput.value.trim();
+
+
+            // Empty validation
+
+            if (text === "") {
+
+                alert("Please enter a task!");
+
+                return;
+
+            }
+
+
+            // Task object
+
+            const task = {
+
+                id: Date.now(),
+
+                text: text,
+
+                category: category,
+
+                priority: priority,
+
+                date: date,
+
+                completed: false
+
+            };
+
+
+            // Add task
+
+            tasks.push(task);
+
+
+            // Save
+
+            saveTasks();
+
+
+            // Clear fields
+
+            taskInput.value = "";
+
+            document.getElementById("dateInput").value = "";
+
+
+            // Display
+
+            displayTasks();
+
+
+            // Focus
+
+            taskInput.focus();
+
+        }
+
+
+        // ================= DISPLAY TASKS =================
+
+        function displayTasks() {
+
+            const taskList =
+                document.getElementById("taskList");
+
+            const emptyMessage =
+                document.getElementById("emptyMessage");
+
+            const search =
+                document.getElementById("searchInput")
+                    .value
+                    .toLowerCase();
+
+            const filter =
+                document.getElementById("filterInput").value;
+
+            const sort =
+                document.getElementById("sortInput").value;
+
+
+            // Search
+
+            let filtered =
+                tasks.filter(task =>
+                    task.text.toLowerCase().includes(search)
+                );
+
+
+            // Filter
+
+            if (filter === "active") {
+
+                filtered =
+                    filtered.filter(task => !task.completed);
+
+            }
+
+
+            if (filter === "completed") {
+
+                filtered =
+                    filtered.filter(task => task.completed);
+
+            }
+
+
+            if (filter === "high") {
+
+                filtered =
+                    filtered.filter(
+                        task => task.priority === "High"
+                    );
+
+            }
+
+
+            if (filter === "today") {
+
+                const today =
+                    new Date().toISOString().split("T")[0];
+
+                filtered =
+                    filtered.filter(task => task.date === today);
+
+            }
+
+
+            // Sorting
+
+            if (sort === "newest") {
+
+                filtered.sort((a, b) => b.id - a.id);
+
+            }
+
+
+            if (sort === "oldest") {
+
+                filtered.sort((a, b) => a.id - b.id);
+
+            }
+
+
+            if (sort === "priority") {
+
+                const values = {
+                    "High": 3,
+                    "Medium": 2,
+                    "Low": 1
+                };
+
+                filtered.sort(
+                    (a, b) =>
+                        values[b.priority] -
+                        values[a.priority]
+                );
+
+            }
+
+
+            if (sort === "date") {
+
+                filtered.sort(
+                    (a, b) =>
+                        (a.date || "9999")
+                            .localeCompare(b.date || "9999")
+                );
+
+            }
+
+
+            // Clear list
+
+            taskList.innerHTML = "";
+
+
+            // Empty state
+
+            if (filtered.length === 0) {
+
+                emptyMessage.style.display = "block";
+
+            } else {
+
+                emptyMessage.style.display = "none";
+
+            }
+
+
+            // Create cards
+
+            filtered.forEach(task => {
+
+
+                const card =
+                    document.createElement("div");
+
+
+                card.className =
+                    "bg-white/80 rounded-2xl p-5 border " +
+                    "border-gray-100 shadow-sm " +
+                    "hover:shadow-xl hover:-translate-y-1 " +
+                    "transition";
+
+
+                // Priority color
+
+                let priorityColor =
+                    "bg-green-100 text-green-700";
+
+
+                if (task.priority === "Medium") {
+
+                    priorityColor =
+                        "bg-yellow-100 text-yellow-700";
+
+                }
+
+
+                if (task.priority === "High") {
+
+                    priorityColor =
+                        "bg-red-100 text-red-700";
+
+                }
+
+
+                // Date status
+
+                let dateHTML = "";
+
+
+                if (task.date) {
+
+                    const today =
+                        new Date()
+                            .toISOString()
+                            .split("T")[0];
+
+
+                    if (
+                        task.date < today &&
+                        !task.completed
+                    ) {
+
+                        dateHTML = `
+                            <span class="bg-red-100 text-red-600
+                            px-3 py-1 rounded-full text-xs">
+                            🚨 Overdue: ${task.date}
+                            </span>
+                        `;
+
+                    } else {
+
+                        dateHTML = `
+                            <span class="bg-blue-100 text-blue-600
+                            px-3 py-1 rounded-full text-xs">
+                            📅 ${task.date}
+                            </span>
+                        `;
+
+                    }
+
+                }
+
+
+                card.innerHTML = `
+
+                    <div class="flex items-start gap-4">
+
+
+                        <!-- Checkbox -->
+
+                        <input
+                            type="checkbox"
+                            ${task.completed ? "checked" : ""}
+                            onchange="toggleTask(${task.id})"
+                            class="w
