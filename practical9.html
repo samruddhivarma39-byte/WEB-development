@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TaskFlow - Personal To-Do List</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100">
+
+    <!-- HEADER -->
+    <header class="bg-white/90 backdrop-blur-md shadow-md">
+        <div class="max-w-6xl mx-auto px-5 py-5 flex justify-between items-center">
+
+            <div class="flex items-center gap-3">
+
+                <div class="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-600
+                            rounded-xl flex items-center justify-center text-white shadow-lg">
+                    <i data-lucide="check-square"></i>
+                </div>
+
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800">
+                        TaskFlow
+                    </h1>
+
+                    <p class="text-sm text-gray-500">
+                        Personal Productivity Dashboard
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Dark Mode Button -->
+            <button onclick="toggleDarkMode()"
+                class="w-11 h-11 rounded-xl bg-gray-100 hover:bg-gray-200
+                       flex items-center justify-center">
+
+                <span id="themeIcon">🌙</span>
+
+            </button>
+
+        </div>
+    </header>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-6xl mx-auto px-5 py-8">
+
+        <!-- WELCOME -->
+        <div class="mb-8">
+
+            <h2 class="text-4xl font-bold text-gray-800">
+                Good Day! 👋
+            </h2>
+
+            <p class="text-gray-600 mt-2">
+                Plan your tasks and make your day productive.
+            </p>
+
+        </div>
+
+
+        <!-- STATISTICS -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+
+            <!-- Total -->
+            <div class="bg-white rounded-2xl p-5 shadow-lg">
+
+                <p class="text-gray-500 text-sm">
+                    Total Tasks
+                </p>
+
+                <h2 id="totalTasks"
+                    class="text-3xl font-bold text-indigo-600 mt-2">
+                    0
+                </h2>
+
+                <p class="text-sm mt-2">
+                    📋 All tasks
+                </p>
+
+            </div>
+
+
+            <!-- Active -->
+            <div class="bg-white rounded-2xl p-5 shadow-lg">
+
+                <p class="text-gray-500 text-sm">
+                    Active
+                </p>
+
+                <h2 id="activeTasks"
+                    class="text-3xl font-bold text-orange-500 mt-2">
+                    0
+                </h2>
+
+                <p class="text-sm mt-2">
+                    ⏳ Remaining
+                </p>
+
+            </div>
+
+
+            <!-- Completed -->
+            <div class="bg-white rounded-2xl p-5 shadow-lg">
+
+                <p class="text-gray-500 text-sm">
+                    Completed
+                </p>
+
+                <h2 id="completedTasks"
+                    class="text-3xl font-bold text-green-500 mt-2">
+                    0
+                </h2>
+
+                <p class="text-sm mt-2">
+                    ✅ Finished
+                </p>
+
+            </div>
+
+
+            <!-- High Priority -->
+            <div class="bg-white rounded-2xl p-5 shadow-lg">
+
+                <p class="text-gray-500 text-sm">
+                    High Priority
+                </p>
+
+                <h2 id="highTasks"
+                    class="text-3xl font-bold text-red-500 mt-2">
+                    0
+                </h2>
+
+                <p class="text-sm mt-2">
+                    🔥 Important
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- PROGRESS BAR -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+
+            <div class="flex justify-between mb-3">
+
+                <h3 class="font-bold text-gray-700">
+                    📊 Daily Progress
+                </h3>
+
+                <span id="progressText"
+                    class="font-bold text-indigo-600">
+                    0%
+                </span>
+
+            </div>
+
+            <div class="w-full bg-gray-200 rounded-full h-4">
+
+                <div id="progressBar"
+                    class="bg-gradient-to-r from-indigo-500 to-purple-600
+                           h-4 rounded-full transition-all duration-500"
+                    style="width:0%">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ADD TASK -->
+        <div class="bg-white rounded-3xl shadow-xl p-6 mb-8">
+
+            <h3 class="text-xl font-bold text-gray-800 mb-5">
+                ➕ Add New Task
+            </h3>
+
+            <div class="grid md:grid-cols-4 gap-3">
+
+                <!-- Task Input -->
+                <input
+                    id="taskInput"
+                    type="text"
+                    placeholder="Enter your task..."
+                    class="md:col-span-2 px-4 py-3 rounded-xl border
+                           focus:outline-none focus:ring-2
+                           focus:ring-indigo-400">
+
+                <!-- Priority -->
+                <select
+                    id="priorityInput"
+                    class="px-4 py-3 rounded-xl border
+                           focus:outline-none focus:ring-2
+                           focus:ring-indigo-400">
+
+                    <option value="Low">🟢 Low Priority</option>
+                    <option value="Medium">🟡 Medium Priority</option>
+                    <option value="High">🔴 High Priority</option>
+
+                </select>
+
+                <!-- Date -->
+                <input
+                    id="dateInput"
+                    type="date"
+                    class="px-4 py-3 rounded-xl border
+                           focus:outline-none focus:ring-2
+                           focus:ring-indigo-400">
+
+            </div>
+
+            <button
+                onclick="addTask()"
+                class="mt-4 w-full py-3 rounded-xl
+                       bg-gradient-to-r from-indigo-500
+                       to-purple-600 text-white font-bold
+                       hover:from-indigo-600 hover:to-purple-700
+                       transition shadow-lg">
+
+                + Add Task
+
+            </button>
+
+        </div>
+
+
+        <!-- SEARCH AND FILTER -->
+        <div class="bg-white rounded-2xl shadow-lg p-5 mb-6">
+
+            <div class="grid md:grid-cols-2 gap-3">
+
+                <!-- Search -->
+                <input
+                    id="searchInput"
+                    type="text"
+                    placeholder="🔍 Search tasks..."
+                    oninput="displayTasks()"
+                    class="px-4 py-3 rounded-xl border
+                           focus:outline-none focus:ring-2
+                           focus:ring-indigo-400">
+
+
+                <!-- Filter -->
+                <select
+                    id="filterInput"
+                    onchange="displayTasks()"
+                    class="px-4 py-3 rounded-xl border
+                           focus:outline-none focus:ring-2
+                           focus:ring-indigo-400">
+
+                    <option value="all">📋 All Tasks</option>
+                    <option value="active">⏳ Active Tasks</option>
+                    <option value="completed">✅ Completed Tasks</option>
+                    <option value="high">🔥 High Priority</option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- TASK LIST -->
+        <div class="bg-white rounded-3xl shadow-xl p-6">
+
+            <div class="flex justify-between items-center mb-5">
+
+                <h3 class="text-xl font-bold text-gray-800">
+                    📋 My Tasks
+                </h3>
+
+                <button
+                    onclick="clearCompleted()"
+                    class="text-sm text-red-500 hover:text-red-700 font-semibold">
+
+                    Clear Completed
+
+                </button>
+
+            </div>
+
+
+            <div id="taskList" class="space-y-3"></div>
+
+
+            <!-- Empty Message -->
+            <div id="emptyMessage"
+                class="text-center py-12">
+
+                <div class="text-6xl mb-4">
+                    🎉
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-600">
+                    No Tasks Found
+                </h3>
+
+                <p class="text-gray-400 mt-2">
+                    Add a new task to get started.
+                </p>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="text-center py-6 text-gray-500 text-sm">
+
+        Stay Organized • Stay Productive • Stay Happy 💜
+
+    </footer>
+
+
+    <!-- JAVASCRIPT -->
+    <script>
+
+        // Store tasks
+        let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+
+        // Add Task
+        function addTask() {
+
+            const taskInput =
+                document.getElementById("taskInput");
+
+            const priority =
+                document.getElementById("priorityInput").value;
+
+            const date =
+                document.getElementById("dateInput").value;
+
+            const text = taskInput.value.trim();
+
+
+            // Check empty input
+            if (text === "") {
+
+                alert("Please enter a task!");
+
+                return;
+            }
+
+
+            // Create task object
+            const task = {
+
+                id: Date.now(),
+
+                text: text,
+
+                priority: priority,
+
+                date: date,
+
+                completed: false
+
+            };
+
+
+            // Add task
+            tasks.push(task);
+
+
+            // Save to LocalStorage
+            saveTasks();
+
+
+            // Clear input
+            taskInput.value = "";
+
+            document.getElementById("dateInput").value = "";
+
+
+            // Display
+            displayTasks();
+
+        }
+
+
+        // Display Tasks
+        function displayTasks() {
+
+            const taskList =
+                document.getElementById("taskList");
+
+            const emptyMessage =
+                document.getElementById("emptyMessage");
+
+            const search =
+                document.getElementById("searchInput")
+                    .value
+                    .toLowerCase();
+
+            const filter =
+                document.getElementById("filterInput").value;
+
+
+            taskList.innerHTML = "";
+
+
+            // Filter tasks
+            let filteredTasks = tasks.filter(task => {
+
+                const matchesSearch =
+                    task.text.toLowerCase().includes(search);
+
+
+                let matchesFilter = true;
+
+
+                if (filter === "active") {
+
+                    matchesFilter = !task.completed;
+
+                }
+
+
+                if (filter === "completed") {
+
+                    matchesFilter = task.completed;
+
+                }
+
+
+                if (filter === "high") {
+
+                    matchesFilter =
+                        task.priority === "High";
+
+                }
+
+
+                return matchesSearch && matchesFilter;
+
+            });
+
+
+            // Empty state
+            if (filteredTasks.length === 0) {
+
+                emptyMessage.style.display = "block";
+
+            } else {
+
+                emptyMessage.style.display = "none";
+
+            }
+
+
+            // Create tasks
+            filteredTasks.forEach(task => {
+
+                const div =
+                    document.createElement("div");
+
+
+                div.className =
+                    "flex flex-col md:flex-row md:items-center " +
+                    "gap-4 p-4 bg-gray-50 rounded-2xl " +
+                    "border hover:shadow-md transition";
+
+
+                // Priority color
+                let priorityClass =
+                    "bg-green-100 text-green-700";
+
+
+                if (task.priority === "Medium") {
+
+                    priorityClass =
+                        "bg-yellow-100 text-yellow-700";
+
+                }
+
+
+                if (task.priority === "High") {
+
+                    priorityClass =
+                        "bg-red-100 text-red-700";
+
+                }
+
+
+                div.innerHTML = `
+
+                    <!-- Checkbox -->
+
+                    <input
+                        type="checkbox"
+                        ${task.completed ? "checked" : ""}
+                        onchange="toggleTask(${task.id})"
+                        class="w-5 h-5 accent-indigo-600 cursor-pointer">
+
+
+                    <!-- Task Details -->
+
+                    <div class="flex-1">
+
+                        <p class="
+                            font-semibold
+                            ${task.completed
+                                ? "line-through text-gray-400"
+                                : "text-gray-700"}
+                        ">
+
+                            ${task.text}
+
+                        </p>
+
+
+                        <div class="flex flex-wrap gap-2 mt-2">
+
+                            <span class="
+                                px-3 py-1 rounded-full
+                                text-xs font-semibold
+                                ${priorityClass}
+                            ">
+
+                                ${task.priority} Priority
+
+                            </span>
+
+
+                            ${
+                                task.date
+                                ?
+                                `<span class="text-xs bg-blue-100
+                                text-blue-700 px-3 py-1
+                                rounded-full">
+
+                                    📅 ${task.date}
+
+                                </span>`
+                                :
+                                ""
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Edit -->
+
+                    <button
+                        onclick="editTask(${task.id})"
+                        class="px-3 py-2 rounded-lg
+                               bg-blue-100 text-blue-600
+                               hover:bg-blue-500 hover:text-white">
+
+                        ✏️
+
+                    </button>
+
+
+                    <!-- Delete -->
+
+                    <button
+                        onclick="deleteTask(${task.id})"
+                        class="px-3 py-2 rounded-lg
+                               bg-red-100 text-red-600
+                               hover:bg-red-500 hover:text-white">
+
+                        🗑️
+
+                    </button>
+
+                `;
+
+
+                taskList.appendChild(div);
+
+            });
+
+
+            updateStatistics();
+
+        }
+
+
+        // Complete / Uncomplete Task
+        function toggleTask(id) {
+
+            tasks = tasks.map(task => {
+
+                if (task.id === id) {
+
+                    task.completed = !task.completed;
+
+                }
+
+                return task;
+
+            });
+
+
+            saveTasks();
+
+            displayTasks();
+
+        }
+
+
+        // Delete Task
+        function deleteTask(id) {
+
+            if (!confirm("Delete this task?")) {
+
+                return;
+
+            }
+
+
+            tasks =
+                tasks.filter(task => task.id !== id);
+
+
+            saveTasks();
+
+            displayTasks();
+
+        }
+
+
+        // Edit Task
+        function editTask(id) {
+
+            const task =
+                tasks.find(task => task.id === id);
+
+
+            const newText =
+                prompt("Edit your task:", task.text);
+
+
+            if (newText !== null &&
+                newText.trim() !== "") {
+
+                task.text = newText.trim();
+
+                saveTasks();
+
+                displayTasks();
+
+            }
+
+        }
+
+
+        // Clear Completed Tasks
+        function clearCompleted() {
+
+            tasks =
+                tasks.filter(task => !task.completed);
+
+
+            saveTasks();
+
+            displayTasks();
+
+        }
+
+
+        // Update Statistics
+        function updateStatistics() {
+
+            const total = tasks.length;
+
+
+            const completed =
+                tasks.filter(task => task.completed).length;
+
+
+            const active =
+                total - completed;
+
+
+            const high =
+                tasks.filter(
+                    task =>
+                    task.priority === "High" &&
+                    !task.completed
+                ).length;
+
+
+            document.getElementById("totalTasks")
+                .textContent = total;
+
+
+            document.getElementById("activeTasks")
+                .textContent = active;
+
+
+            document.getElementById("completedTasks")
+                .textContent = completed;
+
+
+            document.getElementById("highTasks")
+                .textContent = high;
+
+
+            // Progress
+            let progress = 0;
+
+
+            if (total > 0) {
+
+                progress =
+                    Math.round(
+                        (completed / total) * 100
+                    );
+
+            }
+
+
+            document.getElementById("progressText")
+                .textContent = progress + "%";
+
+
+            document.getElementById("progressBar")
+                .style.width = progress + "%";
+
+        }
+
+
+        // Save Tasks
+        function saveTasks() {
+
+            localStorage.setItem(
+                "tasks",
+                JSON.stringify(tasks)
+            );
+
+        }
+
+
+        // Dark Mode
+        function toggleDarkMode() {
+
+            document.body.classList.toggle(
+                "bg-gray-900"
+            );
+
+            document.body.classList.toggle(
+                "text-white"
+            );
+
+
+            const icon =
+                document.getElementById("themeIcon");
+
+
+            if (icon.textContent === "🌙") {
+
+                icon.textContent = "☀️";
+
+            } else {
+
+                icon.textContent = "🌙";
+
+            }
+
+        }
+
+
+        // Enter key to add task
+        document.getElementById("taskInput")
+            .addEventListener("keydown", function(event) {
+
+                if (event.key === "Enter") {
+
+                    addTask();
+
+                }
+
+            });
+
+
+        // Initial display
+        displayTasks();
+
+    </script>
+
+</body>
+
+</html>
